@@ -16,10 +16,11 @@ func main() {
 	}
 
 	flag.Usage = func() {
-		fmt.Fprint(os.Stderr, "belfry [-h] [-p port] destination [command]\n\n")
+		fmt.Fprint(os.Stderr, "belfry [-h] [-p port] [-bastion host] destination [command]\n\n")
 		flag.PrintDefaults()
 	}
 	flag.StringVar(&args.Port, "p", "22", "remote port")
+	flag.StringVar(&args.Bastion, "bastion", "", "bastion host")
 	flag.CommandLine.Init(os.Args[0], flag.ContinueOnError)
 	if err := flag.CommandLine.Parse(os.Args[1:]); err != nil {
 		os.Exit(255)

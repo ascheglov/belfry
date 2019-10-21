@@ -12,6 +12,26 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
+// GetPrivateKey reads default private key.
+func GetPrivateKey() (interface{}, error) {
+	user, err := user.Current()
+	if err != nil {
+		return nil, fmt.Errorf("Failed to get user info: %w", err)
+	}
+
+	pemBytes, err := ioutil.ReadFile(filepath.Join(user.HomeDir, ".ssh/id_rsa"))
+	if err != nil {
+		return nil, fmt.Errorf("Failed to read private key: %w", err)
+	}
+
+	key, err := ssh.ParseRawPrivateKey(pemBytes)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to parse private key: %w", err)
+	}
+
+	return key, nil
+}
+
 // GetSSHKey gets ssh key.
 func GetSSHKey(keyPath string) (ssh.AuthMethod, error) {
 	privateKey, err := ioutil.ReadFile(keyPath)
